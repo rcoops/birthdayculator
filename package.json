@@ -1,0 +1,29 @@
+{
+  "name": "human-date-diff-calculator",
+  "version": "1.0.0",
+  "description": "",
+  "module": "dist/index.esm.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "rimraf dist && node build.js && tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^27.5.1",
+    "@types/luxon": "^2.3.2",
+    "@types/node": "^17.0.35",
+    "esbuild": "^0.14.39",
+    "esbuild-node-externals": "^1.4.1",
+    "jest": "^28.1.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.3",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "luxon": "^2.4.0"
+  }
+}
