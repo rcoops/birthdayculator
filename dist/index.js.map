@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/index.ts"],
-  "sourcesContent": ["import {DateTime} from 'luxon';\ninterface X {\n  x: 1;\n}\n\nconst y: X = {x: 1}\nconsole.log(DateTime.fromISO(\"2022-05-27T00:00:00Z\"));\n\n\nexport function toDateDiff(date: string | DateTime) {\n  if (typeof date === \"string\") {\n    return DateTime.fromISO(date);\n  }\n  return date\n}"],
-  "mappings": "4ZAAA,2DAAuB,iBAMvB,QAAQ,IAAI,WAAS,QAAQ,sBAAsB,CAAC,EAG7C,WAAoB,EAAyB,CAClD,MAAI,OAAO,IAAS,SACX,WAAS,QAAQ,CAAI,EAEvB,CACT",
-  "names": []
-}
