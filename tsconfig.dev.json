@@ -1,15 +1,11 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "esModuleInterop": true,
-        "noImplicitAny": true,
-    },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "spec/**/*.ts",
-        "**/*.js"
-    ]
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "commonjs",
+    "target": "es5",
+    "esModuleInterop": true,
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["spec/**/*.ts", "**/*.js"]
 }

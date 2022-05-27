@@ -7,7 +7,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "rimraf dist && node build.js && tsc"
+    "build": "rimraf dist && node build.js && tsc",
+    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts ."
   },
   "keywords": [],
   "author": "",
@@ -22,8 +23,11 @@
     "esbuild-node-externals": "^1.4.1",
     "eslint": "^8.16.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "jest": "^28.1.0",
+    "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.3",
     "typescript": "^4.6.4"

@@ -1,3 +1,3 @@
-import build from './build.js';
+import build from './build';
 
 build();
