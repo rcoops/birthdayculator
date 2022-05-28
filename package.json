@@ -8,7 +8,9 @@
   "scripts": {
     "test": "jest",
     "build": "rimraf dist && node build.js && tsc",
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts ."
+    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
+    "format": "prettier . -w",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +32,8 @@
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.3",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "husky": "^8.0.0"
   },
   "dependencies": {
     "luxon": "^2.4.0"
