@@ -7,6 +7,7 @@ function toDateTime(date: string | DateTime) {
   return date;
 }
 
+// do a thing
 export default function toDateDiff(date: string | DateTime, other?: string | DateTime) {
   const dateTime = toDateTime(date);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
