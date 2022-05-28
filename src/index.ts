@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-  function toDateTime(date: string | DateTime) {
+function toDateTime(date: string | DateTime) {
   if (typeof date === 'string') {
     return DateTime.fromISO(date, { zone: 'utc' });
   }
