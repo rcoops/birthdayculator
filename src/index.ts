@@ -1,16 +1,57 @@
-import { DateTime } from 'luxon';
+import { DateTime, DurationObjectUnits } from 'luxon';
 
-function toDateTime(date: string | DateTime) {
+export interface NextBirthdayInfo {
+  nextBirthday: DateTime;
+  durationUntilNextBirthday: DurationObjectUnits;
+}
+
+export interface BirthdayInfo {
+  age: DurationObjectUnits;
+  nextBirthdayInfo?: NextBirthdayInfo;
+}
+
+function toDateTime(date: string | DateTime): DateTime {
   if (typeof date === 'string') {
     return DateTime.fromISO(date, { zone: 'utc' });
   }
   return date;
 }
 
+function isNothing<T>(thing?: T): boolean {
+  return thing === undefined || thing === null;
+}
+
+function getNextBirthday(birthday: DateTime, comparisonDate: DateTime): DateTime {
+  const birthdayThisYear = birthday.set({ year: comparisonDate.year });
+  return birthdayThisYear <= comparisonDate
+    ? birthdayThisYear.set({ year: birthdayThisYear.year + 1 })
+    : birthdayThisYear;
+}
+
+function getDiff(first: DateTime, second: DateTime): DurationObjectUnits {
+  return second.diff(first, ['years', 'months', 'weeks', 'days']).toObject();
+}
+
+function calculateNextBirthdayInfo(birthday: DateTime, comparisonDate: DateTime): NextBirthdayInfo {
+  const nextBirthday = getNextBirthday(birthday, comparisonDate);
+  const durationUntilNextBirthday = getDiff(comparisonDate, nextBirthday);
+  return { nextBirthday, durationUntilNextBirthday };
+}
+
 // do a thing
-export default function toDateDiff(date: string | DateTime, other?: string | DateTime) {
-  const dateTime = toDateTime(date);
+export default function calculateBirthdayInfo(
+  birthdayInput: string | DateTime,
+  comparisonDateInput?: string | DateTime,
+  includeNextBirthday = false,
+): BirthdayInfo {
+  const birthday = toDateTime(birthdayInput);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const otherDateTime = other === undefined ? DateTime.utc() : toDateTime(other);
-  return dateTime;
+  const comparisonDate = isNothing(comparisonDateInput) ? DateTime.utc() : toDateTime(comparisonDateInput);
+
+  const age = getDiff(birthday, comparisonDate);
+
+  return {
+    age,
+    ...(includeNextBirthday ? { nextBirthdayInfo: calculateNextBirthdayInfo(birthday, comparisonDate) } : {}),
+  };
 }
