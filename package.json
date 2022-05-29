@@ -1,5 +1,5 @@
 {
-  "name": "human-date-diff-calculator",
+  "name": "birthdayculator",
   "version": "1.0.0",
   "description": "",
   "module": "dist/index.esm.js",
@@ -28,12 +28,13 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "husky": "^8.0.0",
     "jest": "^28.1.0",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.3",
-    "typescript": "^4.6.4",
-    "husky": "^8.0.0"
+    "typescript": "^4.6.4"
   },
   "dependencies": {
     "luxon": "^2.4.0"
