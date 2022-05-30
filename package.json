@@ -1,7 +1,7 @@
 {
   "name": "birthdayculator",
   "version": "1.0.0",
-  "description": "",
+  "description": "A set of utility functions for calculating age, duration until next birthday, age at and date of next birthday etc.",
   "module": "dist/index.esm.js",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -12,8 +12,12 @@
     "format": "prettier . -w",
     "prepare": "husky install"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "age",
+    "birthday",
+    "birthdate"
+  ],
+  "author": "Rick Cooper <rcoops84@hotmail.com>",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^27.5.1",
