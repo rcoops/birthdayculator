@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "emitDeclarationOnly": true,
     "declaration": true,
     "declarationDir": "dist"

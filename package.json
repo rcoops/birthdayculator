@@ -7,18 +7,31 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "rimraf dist && node build.js && tsc",
+    "build": "rimraf dist && node build.js",
+    "watch": "rimraf dist && node build.js --dev",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "format": "prettier . -w",
     "prepare": "husky install"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "keywords": [
     "age",
     "birthday",
-    "birthdate"
+    "birth-date"
   ],
   "author": "Rick Cooper <rcoops84@hotmail.com>",
+  "repository": {
+    "url": "https://github.com/rcoops/birthdayculator"
+  },
   "license": "ISC",
+  "dependencies": {
+    "luxon": "^2.4.0"
+  },
+  "peerDependencies": {
+    "luxon": "^2.4.0"
+  },
   "devDependencies": {
     "@types/jest": "^27.5.1",
     "@types/luxon": "^2.3.2",
@@ -35,12 +48,10 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "husky": "^8.0.0",
     "jest": "^28.1.0",
+    "npm-dts": "^1.3.11",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.3",
     "typescript": "^4.6.4"
-  },
-  "dependencies": {
-    "luxon": "^2.4.0"
   }
 }

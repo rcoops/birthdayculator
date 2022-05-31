@@ -1,13 +1,17 @@
 const { build } = require('esbuild');
 const { nodeExternalsPlugin } = require('esbuild-node-externals');
+const { Generator } = require('npm-dts')
+
+const isDev = process.argv.some((a) => a === "--dev")
 
 const shared = {
   entryPoints: ['src/index.ts'],
   platform: 'node',
-  sourcemap: true,
+  sourcemap: isDev,
   target: 'node15',
   minify: true,
   bundle: true,
+  watch: isDev,
   plugins: [nodeExternalsPlugin()],
 };
 
@@ -25,3 +29,8 @@ build({
 }).catch(() => {
   process.exit(1);
 });
+
+new Generator({
+  entry: 'index.ts',
+  output: 'dist/index.d.ts',
+}).generate()
