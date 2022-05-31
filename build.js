@@ -1,8 +1,8 @@
 const { build } = require('esbuild');
 const { nodeExternalsPlugin } = require('esbuild-node-externals');
-const { Generator } = require('npm-dts')
+const { Generator } = require('npm-dts');
 
-const isDev = process.argv.some((a) => a === "--dev")
+const isDev = process.argv.some((a) => a === '--dev');
 
 const shared = {
   entryPoints: ['src/index.ts'],
@@ -33,4 +33,4 @@ build({
 new Generator({
   entry: 'index.ts',
   output: 'dist/index.d.ts',
-}).generate()
+}).generate();
