@@ -10,7 +10,7 @@
     "build": "rimraf dist && node build.js",
     "watch": "rimraf dist && node build.js --dev",
     "lint": "eslint --ext .ts . && prettier . -c",
-    "format": "npm run lint -- --fix && prettier . -w",
+    "format": "eslint --ext .ts . --fix && prettier . -w",
     "prepare": "husky install"
   },
   "files": [
