@@ -9,8 +9,7 @@
     "test": "jest",
     "build": "rimraf dist && node build.js",
     "watch": "rimraf dist && node build.js --dev",
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
-    "precommit": "npm run test && npm run lint && prettier . -c",
+    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts . && prettier . -c",
     "format": "npm run lint -- --fix && prettier . -w",
     "prepare": "husky install"
   },
@@ -28,9 +27,6 @@
   },
   "license": "ISC",
   "dependencies": {
-    "luxon": "^2.4.0"
-  },
-  "peerDependencies": {
     "luxon": "^2.4.0"
   },
   "devDependencies": {
