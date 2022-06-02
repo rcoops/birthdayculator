@@ -1,7 +1,7 @@
 {
   "name": "birthdayculator",
-  "version": "0.0.1",
-  "description": "A set of utility functions for calculating age, duration until next birthday, age at and date of next birthday etc.",
+  "version": "1.0.0",
+  "description": "A thin and extremely specialised wrapper around luxon for calculating birthday info from a birth date",
   "module": "dist/index.esm.js",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/rcoops/birthdayculator/issues"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "luxon": "^2.4.0"
   },
