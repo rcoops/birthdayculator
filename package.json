@@ -9,7 +9,7 @@
     "test": "jest",
     "build": "rimraf dist && node build.js",
     "watch": "rimraf dist && node build.js --dev",
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts . && prettier . -c",
+    "lint": "eslint --ext .ts . && prettier . -c",
     "format": "npm run lint -- --fix && prettier . -w",
     "prepare": "husky install"
   },
