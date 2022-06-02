@@ -3,9 +3,9 @@ import { DateTime, DurationObjectUnits } from 'luxon';
 import { BirthdayComparisonData } from './type';
 
 function toDate(date: string | DateTime): DateTime {
-  const definitelyDate = typeof date === 'string' ? DateTime.fromISO(date, { zone: 'utc' }) : date;
+  const definitelyDate = typeof date === 'string' ? DateTime.fromISO(date) : date;
 
-  return definitelyDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+  return definitelyDate.toUTC().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
 }
 
 export function isNothing<T>(thing?: T): boolean {

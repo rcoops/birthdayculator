@@ -25,6 +25,9 @@
   "repository": {
     "url": "https://github.com/rcoops/birthdayculator"
   },
+  "bugs": {
+    "url": "https://github.com/rcoops/birthdayculator/issues"
+  },
   "license": "ISC",
   "dependencies": {
     "luxon": "^2.4.0"
