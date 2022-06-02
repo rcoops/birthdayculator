@@ -4,7 +4,7 @@ import { BirthdayInfo } from '../type';
 import getNextBirthday from './next-birthday-calculation';
 import { getDiff, toDateTimes } from './util';
 
-export default function calculateNextBirthdayInfo(
+export default function calculateBirthdayInfo(
   birthDateInput: string | DateTime,
   dateToCompareToInput?: string | DateTime,
 ): BirthdayInfo {

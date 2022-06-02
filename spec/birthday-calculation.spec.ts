@@ -1,6 +1,6 @@
 import { DateTime, DurationObjectUnits } from 'luxon';
 
-import calculateNextBirthdayInfo from '../src/birthday-calculation';
+import calculateBirthdayInfo from '../src/birthday-calculation';
 import { Years } from '../src/type';
 
 type Months = number;
@@ -51,7 +51,7 @@ describe('calculateNextBirthdayInfo', () => {
   `(
     'birthDate=$birthDate, comparison=$comparison, expectedCurrentAge=$expectedCurrentAge',
     ({ birthDate, comparison, expectedCurrentAge }: CurrentAgeTestData) => {
-      const { currentAge } = calculateNextBirthdayInfo(birthDate, comparison);
+      const { currentAge } = calculateBirthdayInfo(birthDate, comparison);
 
       expect(currentAge).toEqual(toDurationObjectUnits(expectedCurrentAge));
     },
@@ -74,7 +74,7 @@ describe('calculateNextBirthdayInfo', () => {
   `(
     'birthDate=$birthDate, comparison=$comparison, expectedNextBirthday=$expectedNextBirthday',
     ({ birthDate, comparison, expectedNextBirthday }: NextBirthdayTestData) => {
-      const { nextBirthday } = calculateNextBirthdayInfo(birthDate, comparison);
+      const { nextBirthday } = calculateBirthdayInfo(birthDate, comparison);
 
       expect(nextBirthday).toEqual(DateTime.fromISO(expectedNextBirthday));
     },
@@ -98,7 +98,7 @@ describe('calculateNextBirthdayInfo', () => {
     `birthDate=$birthDate, comparison=$comparison,
     expectedDurationUntilNextBirthday=$expectedDurationUntilNextBirthday`,
     ({ birthDate, comparison, expectedDurationUntilNextBirthday }: DurationUntilNextBirthdayTestData) => {
-      const { durationUntilNextBirthday } = calculateNextBirthdayInfo(birthDate, comparison);
+      const { durationUntilNextBirthday } = calculateBirthdayInfo(birthDate, comparison);
 
       expect(durationUntilNextBirthday).toEqual(toDurationObjectUnits(expectedDurationUntilNextBirthday));
     },
@@ -122,7 +122,7 @@ describe('calculateNextBirthdayInfo', () => {
     `birthDate=$birthDate, comparison=$comparison,
     expectedAgeAtNextBirthday=$expectedAgeAtNextBirthday`,
     ({ birthDate, comparison, expectedAgeAtNextBirthday }: AgeAtNextBirthdayTestData) => {
-      const { ageAtNextBirthday } = calculateNextBirthdayInfo(birthDate, comparison);
+      const { ageAtNextBirthday } = calculateBirthdayInfo(birthDate, comparison);
 
       expect(ageAtNextBirthday).toEqual(expectedAgeAtNextBirthday);
     },
