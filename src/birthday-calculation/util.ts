@@ -1,11 +1,11 @@
 import { DateTime, DurationObjectUnits } from 'luxon';
 
-import { BirthdayComparisonData } from './type';
+import { BirthdayComparisonData } from '../type';
 
 function toDate(date: string | DateTime): DateTime {
   const definitelyDate = typeof date === 'string' ? DateTime.fromISO(date) : date;
 
-  return definitelyDate.toUTC().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+  return definitelyDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
 }
 
 export function isNothing<T>(thing?: T): boolean {
@@ -20,8 +20,10 @@ export function toDateTimes(
   birthdayInput: string | DateTime,
   comparisonDateInput?: string | DateTime,
 ): BirthdayComparisonData {
-  const birthday = toDate(birthdayInput);
-  const dateToCompareTo = isNothing(comparisonDateInput) ? toDate(DateTime.utc()) : toDate(comparisonDateInput);
+  const birthDate = toDate(birthdayInput);
+  const dateToCompareTo = isNothing(comparisonDateInput)
+    ? toDate(DateTime.utc().setZone(birthDate.zone))
+    : toDate(comparisonDateInput);
 
-  return { birthday, dateToCompareTo };
+  return { birthDate, dateToCompareTo };
 }

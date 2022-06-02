@@ -1,16 +1,15 @@
 import { DateTime, DurationObjectUnits } from 'luxon';
 
+export type Years = number;
+
 export interface BirthdayComparisonData {
-  birthday: DateTime;
+  birthDate: DateTime;
   dateToCompareTo: DateTime;
 }
 
-export interface NextBirthdayInfo {
+export interface BirthdayInfo {
+  currentAge: DurationObjectUnits;
   nextBirthday: DateTime;
   durationUntilNextBirthday: DurationObjectUnits;
-}
-
-export interface BirthdayInfo {
-  age: DurationObjectUnits;
-  nextBirthdayInfo?: NextBirthdayInfo;
+  ageAtNextBirthday: Years;
 }

@@ -1,5 +1,4 @@
-import calculateAge from './age';
-import calculateNextBirthdayInfo from './next-birthday';
-import { BirthdayComparisonData, BirthdayInfo, NextBirthdayInfo } from './type';
+import calculateNextBirthdayInfo from './birthday-calculation';
+import { BirthdayInfo } from './type';
 
-export { BirthdayComparisonData, BirthdayInfo, calculateAge, calculateNextBirthdayInfo, NextBirthdayInfo };
+export { BirthdayInfo, calculateNextBirthdayInfo };
