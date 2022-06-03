@@ -15,6 +15,7 @@ export default function calculateBirthdayInfo(
 
   const durationUntilNextBirthday = getDiff(dateToCompareTo, nextBirthday);
   const ageAtNextBirthday = nextBirthday.year - birthDate.year;
-  const nextBirthdayDayOfWeek = nextBirthday.weekdayLong;
+  // clone using set to prevent mutation of original DateTime
+  const { weekdayLong: nextBirthdayDayOfWeek } = nextBirthday.set({ year: nextBirthday.year });
   return { currentAge, nextBirthday, durationUntilNextBirthday, ageAtNextBirthday, nextBirthdayDayOfWeek };
 }
