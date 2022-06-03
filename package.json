@@ -1,6 +1,6 @@
 {
   "name": "birthdayculator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A thin and extremely specialised wrapper around luxon for calculating birthday info from a birth date",
   "module": "dist/index.esm.js",
   "main": "dist/index.js",
