@@ -12,4 +12,5 @@ export interface BirthdayInfo {
   nextBirthday: DateTime;
   durationUntilNextBirthday: DurationObjectUnits;
   ageAtNextBirthday: Years;
+  nextBirthdayDayOfWeek: string;
 }
