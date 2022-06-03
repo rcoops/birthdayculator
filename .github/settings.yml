@@ -1,0 +1,3 @@
+repository:
+  # See https://docs.github.com/en/rest/reference/repos#update-a-repository for all available settings.
+  delete_branch_on_merge: true
