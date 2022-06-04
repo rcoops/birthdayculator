@@ -4,6 +4,17 @@
 
 [1]: https://www.npmjs.com/package/birthdayculator?activeTab=versions
 
+## [2.0.0](https://github.com/rcoops/birthdayculator/compare/v1.1.0...v2.0.0) (2022-06-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Core function takes  single object argument rather than individual arguments
+
+### Features
+
+* add arguments for options ([73d6007](https://github.com/rcoops/birthdayculator/commit/73d600705311f0b187d517edad539660a43456bd))
+
 ## [1.1.0](https://github.com/rcoops/birthdayculator/compare/v1.0.0...v1.1.0) (2022-06-03)
 
 ### Features
