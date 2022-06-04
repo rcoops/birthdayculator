@@ -6,7 +6,10 @@ export default function calculateAge(
   birthdayInput: string | DateTime,
   dateToCompareToInput?: string | DateTime,
 ): DurationObjectUnits {
-  const { birthDate, dateToCompareTo } = toDateTimes(birthdayInput, dateToCompareToInput);
+  const { birthDateTime: birthDate, dateTimeToCompareTo: dateToCompareTo } = toDateTimes(
+    birthdayInput,
+    dateToCompareToInput,
+  );
 
   return getDiff(birthDate, dateToCompareTo);
 }

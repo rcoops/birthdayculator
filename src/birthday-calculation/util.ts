@@ -1,8 +1,8 @@
 import { DateTime, DurationObjectUnits } from 'luxon';
 
-import { BirthdayComparisonData } from '../type';
+import { BirthdayComparisonData, DateArgument } from '../type';
 
-function toDate(date: string | DateTime): DateTime {
+function toDate(date: DateArgument): DateTime {
   const definitelyDate = typeof date === 'string' ? DateTime.fromISO(date) : date;
 
   return definitelyDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
@@ -16,14 +16,11 @@ export function getDiff(first: DateTime, second: DateTime): DurationObjectUnits 
   return second.diff(first, ['years', 'months', 'weeks', 'days']).toObject();
 }
 
-export function toDateTimes(
-  birthdayInput: string | DateTime,
-  comparisonDateInput?: string | DateTime,
-): BirthdayComparisonData {
-  const birthDate = toDate(birthdayInput);
-  const dateToCompareTo = isNothing(comparisonDateInput)
-    ? toDate(DateTime.utc().setZone(birthDate.zone))
-    : toDate(comparisonDateInput);
+export function toDateTimes(birthDate: DateArgument, comparisonDate?: DateArgument): BirthdayComparisonData {
+  const birthDateTime = toDate(birthDate);
+  const dateTimeToCompareTo = isNothing(comparisonDate)
+    ? toDate(DateTime.utc().setZone(birthDateTime.zone))
+    : toDate(comparisonDate);
 
-  return { birthDate, dateToCompareTo };
+  return { birthDateTime, dateTimeToCompareTo };
 }

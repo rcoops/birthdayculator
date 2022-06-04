@@ -1,7 +1,7 @@
 import { DateTime, DurationObjectUnits } from 'luxon';
 
 import calculateBirthdayInfo from '../src/birthday-calculation';
-import { Years } from '../src/type';
+import { Options, Years } from '../src/type';
 
 type Months = number;
 type Weeks = number;
@@ -10,7 +10,7 @@ type TestDataDuration = [Years, Months, Weeks, Days];
 
 interface TestInput {
   birthDate: string;
-  comparison: string;
+  dateToCompareTo: string;
 }
 
 interface CurrentAgeTestData extends TestInput {
@@ -33,13 +33,18 @@ interface NextBirthdayDayOfWeekTestData extends TestInput {
   expectedNextBirthdayDayOfWeek: Years;
 }
 
+interface OptionsTestData {
+  birthDate: string;
+  option: keyof Options;
+}
+
 function toDurationObjectUnits([years, months, weeks, days]: TestDataDuration): DurationObjectUnits {
   return { years, months, weeks, days };
 }
 
 describe('calculateNextBirthdayInfo', () => {
   test.each`
-    birthDate       | comparison      | expectedCurrentAge
+    birthDate       | dateToCompareTo | expectedCurrentAge
     ${'2021-05-25'} | ${'2022-05-25'} | ${[1, 0, 0, 0]}
     ${'2022-05-25'} | ${'2021-05-25'} | ${[-1, 0, 0, 0]}
     ${'2024-02-28'} | ${'2024-03-28'} | ${[0, 1, 0, 0]}
@@ -53,16 +58,31 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${[0, 0, 1, 0]}
     ${'1983-08-24'} | ${'2022-05-29'} | ${[38, 9, 0, 5]}
   `(
-    'birthDate=$birthDate, comparison=$comparison, expectedCurrentAge=$expectedCurrentAge',
-    ({ birthDate, comparison, expectedCurrentAge }: CurrentAgeTestData) => {
-      const { currentAge } = calculateBirthdayInfo(birthDate, comparison);
+    'birthDate=$birthDate, dateToCompareTo=$dateToCompareTo, expectedCurrentAge=$expectedCurrentAge',
+    ({ birthDate, dateToCompareTo, expectedCurrentAge }: CurrentAgeTestData) => {
+      const { currentAge } = calculateBirthdayInfo({ birthDate, dateToCompareTo });
 
       expect(currentAge).toEqual(toDurationObjectUnits(expectedCurrentAge));
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedCurrentAge
+    birthDate       | option
+    ${'2021-05-25'} | ${'currentAge'}
+    ${'2022-05-25'} | ${'nextBirthday'}
+    ${'2024-02-28'} | ${'durationUntilNextBirthday'}
+    ${'2024-02-29'} | ${'ageAtNextBirthday'}
+    ${'2024-02-28'} | ${'nextBirthdayDayOfWeek'}
+  `('birthDate=$birthDate, option=$option', ({ birthDate, option }: OptionsTestData) => {
+    const options = { [option]: true };
+
+    const info = calculateBirthdayInfo({ birthDate, options });
+
+    expect(Object.keys(info)).toEqual([option]);
+  });
+
+  test.each`
+    birthDate       | dateToCompareTo | expectedCurrentAge
     ${'2021-05-25'} | ${'2022-05-25'} | ${[1, 0, 0, 0]}
     ${'2022-05-25'} | ${'2021-05-25'} | ${[-1, 0, 0, 0]}
     ${'2024-02-28'} | ${'2024-03-28'} | ${[0, 1, 0, 0]}
@@ -76,16 +96,19 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${[0, 0, 1, 0]}
     ${'1983-08-24'} | ${'2022-05-29'} | ${[38, 9, 0, 5]}
   `(
-    'as datetime: birthDate=$birthDate, comparison=$comparison, expectedCurrentAge=$expectedCurrentAge',
-    ({ birthDate, comparison, expectedCurrentAge }: CurrentAgeTestData) => {
-      const { currentAge } = calculateBirthdayInfo(DateTime.fromISO(birthDate), comparison);
+    'as datetime: birthDate=$birthDate, dateToCompareTo=$dateToCompareTo, expectedCurrentAge=$expectedCurrentAge',
+    ({ birthDate, dateToCompareTo, expectedCurrentAge }: CurrentAgeTestData) => {
+      const { currentAge } = calculateBirthdayInfo({
+        birthDate: DateTime.fromISO(birthDate),
+        dateToCompareTo,
+      });
 
       expect(currentAge).toEqual(toDurationObjectUnits(expectedCurrentAge));
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedCurrentAge
+    birthDate       | dateToCompareTo | expectedCurrentAge
     ${'2021-05-25'} | ${'2022-05-25'} | ${[1, 0, 0, 0]}
     ${'2022-05-25'} | ${'2021-05-25'} | ${[-1, 0, 0, 0]}
     ${'2024-02-28'} | ${'2024-03-28'} | ${[0, 1, 0, 0]}
@@ -99,18 +122,18 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${[0, 0, 1, 0]}
     ${'1983-08-24'} | ${'2022-05-29'} | ${[38, 9, 0, 5]}
   `(
-    'birthDate=$birthDate, now=$comparison, expectedCurrentAge=$expectedCurrentAge',
-    ({ birthDate, comparison, expectedCurrentAge }: CurrentAgeTestData) => {
-      jest.useFakeTimers().setSystemTime(DateTime.fromISO(comparison).toMillis());
+    'birthDate=$birthDate, now=$dateToCompareTo, expectedCurrentAge=$expectedCurrentAge',
+    ({ birthDate, dateToCompareTo, expectedCurrentAge }: CurrentAgeTestData) => {
+      jest.useFakeTimers().setSystemTime(DateTime.fromISO(dateToCompareTo).toMillis());
 
-      const { currentAge } = calculateBirthdayInfo(birthDate);
+      const { currentAge } = calculateBirthdayInfo({ birthDate });
 
       expect(currentAge).toEqual(toDurationObjectUnits(expectedCurrentAge));
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedNextBirthday
+    birthDate       | dateToCompareTo | expectedNextBirthday
     ${'2021-05-25'} | ${'2022-05-25'} | ${'2023-05-25'}
     ${'2022-05-25'} | ${'2021-05-25'} | ${'2022-05-25'}
     ${'2024-02-28'} | ${'2024-03-28'} | ${'2025-02-28'}
@@ -124,16 +147,16 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${'1984-07-21'}
     ${'1983-08-24'} | ${'2022-05-29'} | ${'2022-08-24'}
   `(
-    'birthDate=$birthDate, comparison=$comparison, expectedNextBirthday=$expectedNextBirthday',
-    ({ birthDate, comparison, expectedNextBirthday }: NextBirthdayTestData) => {
-      const { nextBirthday } = calculateBirthdayInfo(birthDate, comparison);
+    'birthDate=$birthDate, dateToCompareTo=$dateToCompareTo, expectedNextBirthday=$expectedNextBirthday',
+    ({ birthDate, dateToCompareTo, expectedNextBirthday }: NextBirthdayTestData) => {
+      const { nextBirthday } = calculateBirthdayInfo({ birthDate, dateToCompareTo });
 
       expect(nextBirthday).toEqual(DateTime.fromISO(expectedNextBirthday));
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedNextBirthday
+    birthDate       | dateToCompareTo | expectedNextBirthday
     ${'2021-05-25'} | ${'2022-05-25'} | ${'2023-05-25'}
     ${'2022-05-25'} | ${'2021-05-25'} | ${'2022-05-25'}
     ${'2024-02-28'} | ${'2024-03-28'} | ${'2025-02-28'}
@@ -147,18 +170,18 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${'1984-07-21'}
     ${'1983-08-24'} | ${'2022-05-29'} | ${'2022-08-24'}
   `(
-    'birthDate=$birthDate, comparison=$comparison, expectedNextBirthday=$expectedNextBirthday',
-    ({ birthDate, comparison, expectedNextBirthday }: NextBirthdayTestData) => {
-      jest.useFakeTimers().setSystemTime(DateTime.fromISO(comparison).toMillis());
+    'birthDate=$birthDate, dateToCompareTo=$dateToCompareTo, expectedNextBirthday=$expectedNextBirthday',
+    ({ birthDate, dateToCompareTo, expectedNextBirthday }: NextBirthdayTestData) => {
+      jest.useFakeTimers().setSystemTime(DateTime.fromISO(dateToCompareTo).toMillis());
 
-      const { nextBirthday } = calculateBirthdayInfo(birthDate);
+      const { nextBirthday } = calculateBirthdayInfo({ birthDate });
 
       expect(nextBirthday).toEqual(DateTime.fromISO(expectedNextBirthday));
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedDurationUntilNextBirthday
+    birthDate       | dateToCompareTo | expectedDurationUntilNextBirthday
     ${'2021-05-25'} | ${'2022-05-25'} | ${[1, 0, 0, 0]}
     ${'2022-05-25'} | ${'2021-05-25'} | ${[1, 0, 0, 0]}
     ${'2024-02-28'} | ${'2024-03-28'} | ${[0, 11, 0, 0]}
@@ -172,17 +195,17 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${[0, 11, 3, 2]}
     ${'1983-08-24'} | ${'2022-05-29'} | ${[0, 2, 3, 5]}
   `(
-    `birthDate=$birthDate, comparison=$comparison,
+    `birthDate=$birthDate, dateToCompareTo=$dateToCompareTo,
     expectedDurationUntilNextBirthday=$expectedDurationUntilNextBirthday`,
-    ({ birthDate, comparison, expectedDurationUntilNextBirthday }: DurationUntilNextBirthdayTestData) => {
-      const { durationUntilNextBirthday } = calculateBirthdayInfo(birthDate, comparison);
+    ({ birthDate, dateToCompareTo, expectedDurationUntilNextBirthday }: DurationUntilNextBirthdayTestData) => {
+      const { durationUntilNextBirthday } = calculateBirthdayInfo({ birthDate, dateToCompareTo });
 
       expect(durationUntilNextBirthday).toEqual(toDurationObjectUnits(expectedDurationUntilNextBirthday));
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedDurationUntilNextBirthday
+    birthDate       | dateToCompareTo | expectedDurationUntilNextBirthday
     ${'2021-05-25'} | ${'2022-05-25'} | ${[1, 0, 0, 0]}
     ${'2022-05-25'} | ${'2021-05-25'} | ${[1, 0, 0, 0]}
     ${'2024-02-28'} | ${'2024-03-28'} | ${[0, 11, 0, 0]}
@@ -196,18 +219,18 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${[0, 11, 3, 2]}
     ${'1983-08-24'} | ${'2022-05-29'} | ${[0, 2, 3, 5]}
   `(
-    `birthDate=$birthDate, now=$comparison, expectedDurationUntilNextBirthday=$expectedDurationUntilNextBirthday`,
-    ({ birthDate, comparison, expectedDurationUntilNextBirthday }: DurationUntilNextBirthdayTestData) => {
-      jest.useFakeTimers().setSystemTime(DateTime.fromISO(comparison).toMillis());
+    `birthDate=$birthDate, now=$dateToCompareTo, expectedDurationUntilNextBirthday=$expectedDurationUntilNextBirthday`,
+    ({ birthDate, dateToCompareTo, expectedDurationUntilNextBirthday }: DurationUntilNextBirthdayTestData) => {
+      jest.useFakeTimers().setSystemTime(DateTime.fromISO(dateToCompareTo).toMillis());
 
-      const { durationUntilNextBirthday } = calculateBirthdayInfo(birthDate);
+      const { durationUntilNextBirthday } = calculateBirthdayInfo({ birthDate });
 
       expect(durationUntilNextBirthday).toEqual(toDurationObjectUnits(expectedDurationUntilNextBirthday));
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedAgeAtNextBirthday
+    birthDate       | dateToCompareTo | expectedAgeAtNextBirthday
     ${'2021-05-25'} | ${'2022-05-25'} | ${2}
     ${'2022-05-25'} | ${'2021-05-25'} | ${0}
     ${'2024-02-28'} | ${'2024-03-28'} | ${1}
@@ -221,16 +244,16 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${1}
     ${'1983-08-24'} | ${'2022-05-29'} | ${39}
   `(
-    'birthDate=$birthDate, comparison=$comparison, expectedAgeAtNextBirthday=$expectedAgeAtNextBirthday',
-    ({ birthDate, comparison, expectedAgeAtNextBirthday }: AgeAtNextBirthdayTestData) => {
-      const { ageAtNextBirthday } = calculateBirthdayInfo(birthDate, comparison);
+    'birthDate=$birthDate, dateToCompareTo=$dateToCompareTo, expectedAgeAtNextBirthday=$expectedAgeAtNextBirthday',
+    ({ birthDate, dateToCompareTo, expectedAgeAtNextBirthday }: AgeAtNextBirthdayTestData) => {
+      const { ageAtNextBirthday } = calculateBirthdayInfo({ birthDate, dateToCompareTo });
 
       expect(ageAtNextBirthday).toEqual(expectedAgeAtNextBirthday);
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedAgeAtNextBirthday
+    birthDate       | dateToCompareTo | expectedAgeAtNextBirthday
     ${'2021-05-25'} | ${'2022-05-25'} | ${2}
     ${'2022-05-25'} | ${'2021-05-25'} | ${0}
     ${'2024-02-28'} | ${'2024-03-28'} | ${1}
@@ -244,18 +267,18 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${1}
     ${'1983-08-24'} | ${'2022-05-29'} | ${39}
   `(
-    `birthDate=$birthDate, now=$comparison, expectedAgeAtNextBirthday=$expectedAgeAtNextBirthday`,
-    ({ birthDate, comparison, expectedAgeAtNextBirthday }: AgeAtNextBirthdayTestData) => {
-      jest.useFakeTimers().setSystemTime(DateTime.fromISO(comparison).toMillis());
+    `birthDate=$birthDate, now=$dateToCompareTo, expectedAgeAtNextBirthday=$expectedAgeAtNextBirthday`,
+    ({ birthDate, dateToCompareTo, expectedAgeAtNextBirthday }: AgeAtNextBirthdayTestData) => {
+      jest.useFakeTimers().setSystemTime(DateTime.fromISO(dateToCompareTo).toMillis());
 
-      const { ageAtNextBirthday } = calculateBirthdayInfo(birthDate);
+      const { ageAtNextBirthday } = calculateBirthdayInfo({ birthDate });
 
       expect(ageAtNextBirthday).toEqual(expectedAgeAtNextBirthday);
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedNextBirthdayDayOfWeek
+    birthDate       | dateToCompareTo | expectedNextBirthdayDayOfWeek
     ${'2021-05-25'} | ${'2022-05-25'} | ${'Thursday'}
     ${'2022-05-25'} | ${'2021-05-25'} | ${'Wednesday'}
     ${'2024-02-28'} | ${'2024-03-28'} | ${'Friday'}
@@ -269,16 +292,17 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${'Saturday'}
     ${'1983-08-24'} | ${'2022-05-29'} | ${'Wednesday'}
   `(
-    `birthDate=$birthDate, comparison=$comparison, expectedNextBirthdayDayOfWeek=$expectedNextBirthdayDayOfWeek`,
-    ({ birthDate, comparison, expectedNextBirthdayDayOfWeek }: NextBirthdayDayOfWeekTestData) => {
-      const { nextBirthdayDayOfWeek } = calculateBirthdayInfo(birthDate, comparison);
+    `birthDate=$birthDate, dateToCompareTo=$dateToCompareTo,
+    expectedNextBirthdayDayOfWeek=$expectedNextBirthdayDayOfWeek`,
+    ({ birthDate, dateToCompareTo, expectedNextBirthdayDayOfWeek }: NextBirthdayDayOfWeekTestData) => {
+      const { nextBirthdayDayOfWeek } = calculateBirthdayInfo({ birthDate, dateToCompareTo });
 
       expect(nextBirthdayDayOfWeek).toEqual(expectedNextBirthdayDayOfWeek);
     },
   );
 
   test.each`
-    birthDate       | comparison      | expectedNextBirthdayDayOfWeek
+    birthDate       | dateToCompareTo | expectedNextBirthdayDayOfWeek
     ${'2021-05-25'} | ${'2022-05-25'} | ${'Thursday'}
     ${'2022-05-25'} | ${'2021-05-25'} | ${'Wednesday'}
     ${'2024-02-28'} | ${'2024-03-28'} | ${'Friday'}
@@ -292,11 +316,11 @@ describe('calculateNextBirthdayInfo', () => {
     ${'1983-07-21'} | ${'1983-07-28'} | ${'Saturday'}
     ${'1983-08-24'} | ${'2022-05-29'} | ${'Wednesday'}
   `(
-    `birthDate=$birthDate, now=$comparison, expectedNextBirthdayDayOfWeek=$expectedNextBirthdayDayOfWeek`,
-    ({ birthDate, comparison, expectedNextBirthdayDayOfWeek }: NextBirthdayDayOfWeekTestData) => {
-      jest.useFakeTimers().setSystemTime(DateTime.fromISO(comparison).toMillis());
+    `birthDate=$birthDate, now=$dateToCompareTo, expectedNextBirthdayDayOfWeek=$expectedNextBirthdayDayOfWeek`,
+    ({ birthDate, dateToCompareTo, expectedNextBirthdayDayOfWeek }: NextBirthdayDayOfWeekTestData) => {
+      jest.useFakeTimers().setSystemTime(DateTime.fromISO(dateToCompareTo).toMillis());
 
-      const { nextBirthdayDayOfWeek } = calculateBirthdayInfo(birthDate);
+      const { nextBirthdayDayOfWeek } = calculateBirthdayInfo({ birthDate });
 
       expect(nextBirthdayDayOfWeek).toEqual(expectedNextBirthdayDayOfWeek);
     },

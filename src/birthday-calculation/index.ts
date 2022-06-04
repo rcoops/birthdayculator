@@ -1,21 +1,38 @@
-import { DateTime } from 'luxon';
-
-import { BirthdayInfo } from '../type';
+import { BirthdayInfo, BirthdayInfoArguments, Options } from '../type';
 import getNextBirthday from './next-birthday-calculation';
 import { getDiff, toDateTimes } from './util';
 
-export default function calculateBirthdayInfo(
-  birthDateInput: string | DateTime,
-  dateToCompareToInput?: string | DateTime,
-): BirthdayInfo {
-  const { birthDate, dateToCompareTo } = toDateTimes(birthDateInput, dateToCompareToInput);
+const defaults: Options = {
+  currentAge: true,
+  nextBirthday: true,
+  durationUntilNextBirthday: true,
+  ageAtNextBirthday: true,
+  nextBirthdayDayOfWeek: true,
+};
 
-  const currentAge = getDiff(birthDate, dateToCompareTo);
-  const nextBirthday = getNextBirthday(birthDate, dateToCompareTo).setZone(birthDate.zone);
+export default function calculateBirthdayInfo({
+  birthDate,
+  dateToCompareTo,
+  options,
+}: BirthdayInfoArguments): BirthdayInfo {
+  const actualOptions = options ?? defaults;
 
-  const durationUntilNextBirthday = getDiff(dateToCompareTo, nextBirthday);
-  const ageAtNextBirthday = nextBirthday.year - birthDate.year;
+  const { birthDateTime, dateTimeToCompareTo } = toDateTimes(birthDate, dateToCompareTo);
+
+  const currentAge = getDiff(birthDateTime, dateTimeToCompareTo);
+  const nextBirthday = getNextBirthday(birthDateTime, dateTimeToCompareTo).setZone(birthDateTime.zone);
+
+  const durationUntilNextBirthday = getDiff(dateTimeToCompareTo, nextBirthday);
+  const ageAtNextBirthday = nextBirthday.year - birthDateTime.year;
+
   // clone using set to prevent mutation of original DateTime
   const { weekdayLong: nextBirthdayDayOfWeek } = nextBirthday.set({ year: nextBirthday.year });
-  return { currentAge, nextBirthday, durationUntilNextBirthday, ageAtNextBirthday, nextBirthdayDayOfWeek };
+
+  return {
+    ...(actualOptions.currentAge && { currentAge }),
+    ...(actualOptions.nextBirthday && { nextBirthday }),
+    ...(actualOptions.durationUntilNextBirthday && { durationUntilNextBirthday }),
+    ...(actualOptions.ageAtNextBirthday && { ageAtNextBirthday }),
+    ...(actualOptions.nextBirthdayDayOfWeek && { nextBirthdayDayOfWeek }),
+  };
 }
