@@ -9,4 +9,3 @@ jobs:
         uses: dependabot/fetch-metadata@v1.3.3
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
-          skip-commit-verification: true
