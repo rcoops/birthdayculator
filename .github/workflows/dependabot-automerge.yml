@@ -17,3 +17,6 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ github.actor == dependabot[bot] }}
         run: echo "$GITHUB_CONTEXT"
+      - name: Enable auto-merge for Dependabot PRs
+        if: ${{github.actor == dependabot[bot] && (steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor')}}
+        run: gh pr merge --auto --merge "$PR_URL"
