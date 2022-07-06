@@ -15,5 +15,5 @@ jobs:
     steps:
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ github.actor }}
+          GITHUB_CONTEXT: ${{ github.actor == dependabot[bot] }}
         run: echo "$GITHUB_CONTEXT"
