@@ -12,10 +12,7 @@
       "args": ["${relativeFile}"],
       "runtimeArgs": ["-r", "ts-node/register"],
       "cwd": "${workspaceRoot}",
-      "internalConsoleOptions": "openOnSessionStart",
-      "env": {
-        "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.dev.json"
-      }
+      "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "type": "node",
