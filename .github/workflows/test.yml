@@ -13,8 +13,3 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
