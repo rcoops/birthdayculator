@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ github.actor == dependabot[bot] }}
-        run: echo "$GITHUB_CONTEXT"
+          IS_DEPENDABOT: ${{ github.actor == 'dependabot[bot]' }}
+        run: echo "$IS_DEPENDABOT"
       - name: Enable auto-merge for Dependabot PRs
-        if: ${{github.actor == dependabot[bot] && (steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor')}}
+        if: ${{github.actor == 'dependabot[bot]' && (steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor')}}
         run: gh pr merge --auto --merge "$PR_URL"
