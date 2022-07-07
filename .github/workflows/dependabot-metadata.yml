@@ -3,6 +3,7 @@ on: pull_request_target
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
       - name: Fetch Dependabot metadata
         id: dependabot-metadata
