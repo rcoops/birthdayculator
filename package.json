@@ -30,7 +30,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "luxon": "^2.4.0"
+    "luxon": "^3.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
