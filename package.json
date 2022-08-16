@@ -40,7 +40,7 @@
     "@types/node": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
-    "esbuild": "^0.14.48",
+    "esbuild": "^0.15.3",
     "esbuild-node-externals": "^1.4.1",
     "eslint": "^8.15.0",
     "eslint-config-airbnb-base": "^15.0.0",
